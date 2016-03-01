@@ -22,6 +22,7 @@ import threading
 import time
 import calendar
 import sys
+import socket
 
 import xbmc
 import xbmcgui
@@ -561,6 +562,19 @@ class TVGuide(xbmcgui.WindowXML):
     def _channelDown(self):
         channel = self.database.getPreviousChannel(self.currentChannel)
         self.playChannel(channel)
+    
+    def getIP(self,d):
+        """
+        This method returns the first IP address string
+        that responds as the given domain name
+        """
+        try:
+            data = socket.gethostbyname(d)
+            ip = repr(data)
+            return ip
+        except Exception:
+            # fail gracefully!
+            return False  
 
     def playChannel(self, channel):
         self.currentChannel = channel
@@ -598,7 +612,12 @@ class TVGuide(xbmcgui.WindowXML):
                     endtimestamp=toUTCTimestamp(endtimestamp)
                    
                     url=url+'?archive='+str(long(starttimestamp))+'&archive_end='+str(long(endtimestamp))
-                #xbmc.log(msg='Raven startlog 3:'+str(listitm), level=xbmc.LOGNOTICE)
+                    serverip=self.getIP(url[7:url.index('/',7)])
+                    serverip=serverip.replace('\'','')
+                    url='http://'+str(serverip)+''+url[url.index('/',7):]
+                    #serverip=getIP(url[7:url.index('/',7)])
+                    #url='http://'+serverip
+                xbmc.log(msg='Starte player mit URL:'+str(url), level=xbmc.LOGDEBUG)
                 #orig:self.player.play(item=url, listitem=listitm, windowed=self.osdEnabled)
                 fullsize=False
                 self.player.play(item=url, listitem=listitm, windowed=fullsize)
