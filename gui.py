@@ -34,8 +34,8 @@ import buggalo
 
 import streaming
 
-import pydevd
-pydevd.settrace(stdoutToServer=True, stderrToServer=True)
+#import pydevd
+#pydevd.settrace(stdoutToServer=True, stderrToServer=True)
 
 DEBUG = False
 
