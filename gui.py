@@ -34,8 +34,8 @@ import buggalo
 
 import streaming
 
-#import pydevd
-#pydevd.settrace(stdoutToServer=True, stderrToServer=True)
+import pydevd
+pydevd.settrace(stdoutToServer=True, stderrToServer=True)
 
 DEBUG = False
 
@@ -602,6 +602,7 @@ class TVGuide(xbmcgui.WindowXML):
             else:
                 listitm =xbmcgui.ListItem ('')
                 listitm.setInfo('video', {'Title': channel.title+' - '+program.title, 'Genre': ''})
+                listitm.setArt({ 'thumb': str(self.currentChannel.logo) });
                 nowTime=datetime.datetime.now()
                 if program is not None and program.endDate and program.endDate<nowTime:
                     #starttimestamp=program.startDate-datetime.timedelta(hours=1)
