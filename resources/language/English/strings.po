@@ -192,7 +192,19 @@ msgctxt "#30136"
 msgid "Clear database..."
 msgstr ""
 
-#empty strings from id 30136 to 30149
+msgctxt "#30137"
+msgid "Show channel icon on playback"
+msgstr ""
+
+msgctxt "#30138"
+msgid "URL (Default)"
+msgstr ""
+
+msgctxt "#30139"
+msgid "File (Optional)"
+msgstr ""
+
+#empty strings from id 30141 to 30149
 
 msgctxt "#30150"
 msgid "Oops, sorry about that!"

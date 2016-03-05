@@ -86,7 +86,11 @@ msgstr "Сдвиг по времени для EPG (часов)"
 
 msgctxt "#30136"
 msgid "Clear database..."
-msgstr "Clear database..."
+msgstr "удалить базу данных..."
+
+msgctxt "#30137"
+msgid "Show channel icon on playback"
+msgstr "показать логотип канала при проигрывании"
 
 msgctxt "#30132"
 msgid "URL"

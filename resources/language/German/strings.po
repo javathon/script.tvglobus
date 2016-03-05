@@ -188,6 +188,10 @@ msgctxt "#30136"
 msgid "Clear database..."
 msgstr "Clear database..."
 
+msgctxt "#30137"
+msgid "Show channel icon on playback"
+msgstr "Bild vom Kanal beim abspielen anzeigen"
+
 msgctxt "#30150"
 msgid "Oops, sorry about that!"
 msgstr "Hmm, sollte nicht passieren."
