@@ -157,6 +157,7 @@ class TVGuide(xbmcgui.WindowXML):
         self.osdEnabled = ADDON.getSetting('enable.osd') == 'true' and ADDON.getSetting(
             'alternative.playback') != 'true'
         self.alternativePlayback = ADDON.getSetting('alternative.playback') == 'true'
+        self.playbackthumbs= ADDON.getSetting('ottplaylist.playbackthumbs')
         self.osdChannel = None
         self.osdProgram = None
         
@@ -602,8 +603,10 @@ class TVGuide(xbmcgui.WindowXML):
             else:
                 listitm =xbmcgui.ListItem ('')
                 listitm.setInfo('video', {'Title': channel.title+' - '+program.title, 'Genre': ''})
-                listitm.setArt({ 'thumb': str(self.currentChannel.logo) });
+                if self.playbackthumbs == 'true':
+                    listitm.setArt({ 'thumb': str(self.currentChannel.logo) });
                 nowTime=datetime.datetime.now()
+                #wenn archiv ausgewaehlt wurde
                 if program is not None and program.endDate and program.endDate<nowTime:
                     #starttimestamp=program.startDate-datetime.timedelta(hours=1)
                     starttimestamp=program.startDate+datetime.timedelta(hours=int(self.otttimeshift))
@@ -611,13 +614,11 @@ class TVGuide(xbmcgui.WindowXML):
                     #endtimestamp=program.endDate-datetime.timedelta(hours=1)
                     endtimestamp=program.endDate+datetime.timedelta(hours=int(self.otttimeshift))
                     endtimestamp=toUTCTimestamp(endtimestamp)
-                   
                     url=url+'?archive='+str(long(starttimestamp))+'&archive_end='+str(long(endtimestamp))
-                    serverip=self.getIP(url[7:url.index('/',7)])
-                    serverip=serverip.replace('\'','')
-                    url='http://'+str(serverip)+''+url[url.index('/',7):]
-                    #serverip=getIP(url[7:url.index('/',7)])
-                    #url='http://'+serverip
+                    #end if
+                serverip=self.getIP(url[7:url.index('/',7)])
+                serverip=serverip.replace('\'','')
+                url='http://'+str(serverip)+''+url[url.index('/',7):]
                 xbmc.log(msg='Starte player mit URL:'+str(url), level=xbmc.LOGDEBUG)
                 #orig:self.player.play(item=url, listitem=listitm, windowed=self.osdEnabled)
                 fullsize=False

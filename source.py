@@ -891,10 +891,15 @@ class XMLTVSource(Source):
         self.xmltvType = int(addon.getSetting('xmltv.type'))
         self.xmltvFile = addon.getSetting('xmltv.file')
         self.xmltvUrl = addon.getSetting('xmltv.url')
-        #todo
+        
+        self.playlisttype= addon.getSetting('ottplaylist.playlisttype')
+        self.playlistdefaulturl= addon.getSetting('ottplaylist.playlistdefaulturl')
+        self.playlistfile= addon.getSetting('ottplaylist.playlistfile')
+        
         self.ottServer1= addon.getSetting('ottplaylist.server1')
         self.ottServer2= addon.getSetting('ottplaylist.server2')
         self.ottServer3= addon.getSetting('ottplaylist.server3')
+        self.playbackthumbs= addon.getSetting('ottplaylist.playbackthumbs')
         self.ottKey= addon.getSetting('ottplaylist.ottkey')
         self.otttimeshift= addon.getSetting('ottplaylist.timeshift')
         
@@ -962,17 +967,21 @@ class XMLTVSource(Source):
         content_loaded=False
         streamplaylist=None
         i=0; 
-        while content_loaded==False and i<3:
-            currentplaylisturl=self.getOTTPlalistURL(self.ottserverurl[i])
-            try:
-                ottresponse = urllib2.urlopen(currentplaylisturl,timeout=7)
-                streamplaylist = StringIO.StringIO()
-                streamplaylist.write(ottresponse.read())
-                streamplaylist.seek(0)
-                ottresponse.close()
-                break
-            except:
-                i=i+1
+        if self.playlisttype=='0':
+            while content_loaded==False and i<3:
+                currentplaylisturl=self.getOTTPlalistURL(self.ottserverurl[i])
+                try:
+                    ottresponse = urllib2.urlopen(currentplaylisturl,timeout=7)
+                    streamplaylist = StringIO.StringIO()
+                    streamplaylist.write(ottresponse.read())
+                    streamplaylist.seek(0)
+                    ottresponse.close()
+                    break
+                except:
+                    i=i+1
+        else:
+            data = open(self.playlistfile,'r').read()
+            streamplaylist=StringIO.StringIO(data)
                 
         i=0; 
         while content_loaded==False and i<3: 
@@ -989,6 +998,7 @@ class XMLTVSource(Source):
         parsedxmltvlist=self.parseOTTXMLTV( self.logoFolder, progress_callback)
         
         return parsedxmltvlist
+    
     def parseOTTXMLTV(self, logoFolder, progress_callback):
         elements_parsed=0
         for ottchannel in self.externalPlaylist:
