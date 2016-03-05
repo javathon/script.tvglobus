@@ -92,6 +92,14 @@ msgctxt "#30137"
 msgid "Show channel icon on playback"
 msgstr "показать логотип канала при проигрывании"
 
+msgctxt "#30138"
+msgid "URL (Default)"
+msgstr "URL (Default)"
+
+msgctxt "#30139"
+msgid "File (Optional)"
+msgstr "File (Optional)"
+
 msgctxt "#30132"
 msgid "URL"
 msgstr "URL"

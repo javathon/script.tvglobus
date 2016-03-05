@@ -192,6 +192,14 @@ msgctxt "#30137"
 msgid "Show channel icon on playback"
 msgstr "Bild vom Kanal beim abspielen anzeigen"
 
+msgctxt "#30138"
+msgid "URL (Default)"
+msgstr "URL (Default)"
+
+msgctxt "#30139"
+msgid "File (Optional)"
+msgstr "File (Optional)"
+
 msgctxt "#30150"
 msgid "Oops, sorry about that!"
 msgstr "Hmm, sollte nicht passieren."
