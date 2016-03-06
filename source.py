@@ -461,20 +461,20 @@ class Database(object):
         return result
 
     def _getEPGView(self, channelStart, date, progress_callback, clearExistingProgramList):
-        xbmc.log(msg='Raven getEPGView 1:', level=xbmc.LOGNOTICE)
+        xbmc.log(msg='Metricpoint getEPGView 1:', level=xbmc.LOGDEBUG)
         self._updateChannelAndProgramListCaches(date, progress_callback, clearExistingProgramList)
-        xbmc.log(msg='Raven getEPGView 2:', level=xbmc.LOGNOTICE)
+        xbmc.log(msg='Metricpoint getEPGView 2:', level=xbmc.LOGDEBUG)
         channels = self._getChannelList(onlyVisible=True)
-        xbmc.log(msg='Raven getEPGView 3:', level=xbmc.LOGNOTICE)
+        xbmc.log(msg='Metricpoint getEPGView 3:', level=xbmc.LOGDEBUG)
         if channelStart < 0:
             channelStart = len(channels) - 1
         elif channelStart > len(channels) - 1:
             channelStart = 0
         channelEnd = channelStart + Database.CHANNELS_PER_PAGE
         channelsOnPage = channels[channelStart: channelEnd]
-        xbmc.log(msg='Raven getEPGView 4:', level=xbmc.LOGNOTICE)
+        xbmc.log(msg='Metricpoint getEPGView 4:', level=xbmc.LOGDEBUG)
         programs = self._getProgramList(channelsOnPage, date)
-        xbmc.log(msg='Raven getEPGView 5:', level=xbmc.LOGNOTICE)
+        xbmc.log(msg='Metricpoint getEPGView 5:', level=xbmc.LOGDEBUG)
         return [channelStart, channelsOnPage, programs]
 
     def getNextChannel(self, currentChannel):
@@ -1078,7 +1078,9 @@ class XMLTVSource(Source):
         if dateString is not None:
             try:
                 dateString = long(dateString)
-                zoned_datetime=utcFromUnixtime(dateString)+datetime.timedelta(hours=1)
+#                zoned_datetime=utcFromUnixtime(dateString)+datetime.timedelta(hours=1)
+                zoned_datetime=utcFromUnixtime(dateString)-datetime.timedelta(hours=int(self.otttimeshift))
+                
                 return zoned_datetime
                 #return utcFromUnixtime(dateString)
             except ValueError:
