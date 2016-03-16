@@ -5,6 +5,7 @@ import sys
 import urllib2
 import StringIO
 import json
+import xbmc
 
 class Track:
     def __init__(self, length, title, path, chid, chottid, logo, serverurl):
@@ -45,24 +46,32 @@ class M3UParser:
     # ..\Minus The Bear - Planet of Ice\Minus The Bear_Planet of Ice_01_Burying Luck.mp3
     def parseM3U(self,infile,serverurl):
         #inf = open(infile,'r')
+        xbmc.log(msg='m3uparse: open file:', level=xbmc.LOGDEBUG)
         inf = infile
     
         # # # all m3u files should start with this line:
             #EXTM3U
         # this is not a valid M3U and we should stop..
         line = inf.readline()
-        if not line.startswith('#EXTM3U'):
-           return
+        xbmc.log(msg='m3uparse: firstline:'+str(line), level=xbmc.LOGDEBUG)
+        if '#EXTM3U' not in line:
+            #line.startswith('#EXTM3U'):
+            xbmc.log(msg='m3uparse: return wird ausgeloesst:', level=xbmc.LOGDEBUG)
+            return       
         logos=self.getOTTLogos(serverurl+'/api/channel_now.jsonp')
+        xbmc.log(msg='m3uparse: logo:'+str(logos), level=xbmc.LOGDEBUG)
         # initialize playlist variables before reading file
         playlist=[]
         song=Track(None,None,None,None,None,None,None)
         chid=20000
         for line in inf:
             line=line.strip()
+            xbmc.log(msg='m3uparse: line:'+str(line), level=xbmc.LOGDEBUG)
             if line.startswith('#EXTINF:'):
                 # pull length and title from #EXTINF line
                 length,title=line.split('#EXTINF:')[1].split(',',1)
+                xbmc.log(msg='m3uparse: title:'+str(title), level=xbmc.LOGDEBUG)
+                xbmc.log(msg='m3uparse: length:'+str(length), level=xbmc.LOGDEBUG)
                 # title=title.decode('UTF-8')
                 song=Track(length,title,None,None,None,None,None)
                 
