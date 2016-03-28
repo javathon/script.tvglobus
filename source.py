@@ -406,11 +406,18 @@ class Database(object):
                         channel = program.channel.id
                     else:
                         channel = program.channel
-
-                    c.execute(
-                        'INSERT INTO programs(channel, title, start_date, end_date, description, image_large, image_small, source, updates_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                        [channel, program.title, program.startDate, program.endDate, program.description,
-                         program.imageLarge, program.imageSmall, self.source.KEY, updatesId])
+                    try:
+                        c.execute('INSERT INTO programs(channel, title, start_date, end_date, description, image_large, image_small, source, updates_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)',[channel, program.title, program.startDate, program.endDate, program.description,program.imageLarge, program.imageSmall, self.source.KEY, updatesId])
+                    except:
+                        xbmc.log("SQL-ERROR-Programmupdate Element [channel]:" + str(channel), level=xbmc.LOGDEBUG) 
+                        xbmc.log("SQL-ERROR-Programmupdate Element [program.title]:" + program.title.encode('utf-8','ignore'), level=xbmc.LOGDEBUG)
+                        xbmc.log("SQL-ERROR-Programmupdate Element [program.startDate]:" + str(program.startDate), level=xbmc.LOGDEBUG) 
+                        xbmc.log("SQL-ERROR-Programmupdate Element [program.endDate]:" + str(program.endDate), level=xbmc.LOGDEBUG)
+                        xbmc.log("SQL-ERROR-Programmupdate Element [program.description]:" + str(program.description.encode('utf-8','ignore')), level=xbmc.LOGDEBUG) 
+                        xbmc.log("SQL-ERROR-Programmupdate Element [program.imageLarge]:" + str(program.imageLarge), level=xbmc.LOGDEBUG)
+                        xbmc.log("SQL-ERROR-Programmupdate Element [program.imageSmall]:" + str(program.imageSmall), level=xbmc.LOGDEBUG)
+                        xbmc.log("SQL-ERROR-Programmupdate Element [self.source.KEY]:" + 'xxxxxxxxxx', level=xbmc.LOGDEBUG) 
+                        xbmc.log("SQL-ERROR-Programmupdate Element [updatesId]:" + str(updatesId), level=xbmc.LOGDEBUG)
 
             # channels updated
             c.execute("UPDATE sources SET channels_updated=? WHERE id=?", [datetime.datetime.now(), self.source.KEY])
