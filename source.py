@@ -1085,10 +1085,13 @@ class XMLTVSource(Source):
         if dateString is not None:
             try:
                 dateString = long(dateString)
-#                zoned_datetime=utcFromUnixtime(dateString)+datetime.timedelta(hours=1)
+                originaldate=dateFromUnixtime(dateString)
+                utctt=utcFromUnixtime(dateString)
+                timmedelta=datetime.timedelta(hours=int(self.otttimeshift))
                 zoned_datetime=utcFromUnixtime(dateString)-datetime.timedelta(hours=int(self.otttimeshift))
+                utc_datetime=dateFromUnixtime(dateString)
                 
-                return zoned_datetime
+                return utc_datetime
                 #return utcFromUnixtime(dateString)
             except ValueError:
                 if dateString.find(' ') != -1:

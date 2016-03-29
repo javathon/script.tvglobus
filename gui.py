@@ -77,6 +77,8 @@ def debug(s):
 #============================================================
 def utcFromUnixtime(unixtime):
     return datetime.datetime.utcfromtimestamp(unixtime)
+def dateFromUnixtime(unixtime):
+    return datetime.datetime.fromtimestamp(unixtime)
 def toUnixtime(dt):
     return time.mktime(dt.timetuple())
 def toUTCTimestamp(d): 
@@ -608,12 +610,13 @@ class TVGuide(xbmcgui.WindowXML):
                 nowTime=datetime.datetime.now()
                 #wenn archiv ausgewaehlt wurde
                 if program is not None and program.endDate and program.endDate<nowTime:
-                    #starttimestamp=program.startDate-datetime.timedelta(hours=1)
-                    starttimestamp=program.startDate+datetime.timedelta(hours=int(self.otttimeshift))
-                    starttimestamp=toUTCTimestamp(starttimestamp)
-                    #endtimestamp=program.endDate-datetime.timedelta(hours=1)
-                    endtimestamp=program.endDate+datetime.timedelta(hours=int(self.otttimeshift))
-                    endtimestamp=toUTCTimestamp(endtimestamp)
+                    #starttimestamp=program.startDate+datetime.timedelta(hours=int(self.otttimeshift))
+                    #starttimestamp=toUTCTimestamp(starttimestamp)
+                    starttimestamp=toUnixtime(program.startDate)
+
+                    #endtimestamp=program.endDate+datetime.timedelta(hours=int(self.otttimeshift))
+                    #endtimestamp=toUTCTimestamp(endtimestamp)
+                    endtimestamp=toUnixtime(program.endDate)
                     url=url+'?archive='+str(long(starttimestamp))+'&archive_end='+str(long(endtimestamp))
                     #end if
                 serverip=self.getIP(url[7:url.index('/',7)])
