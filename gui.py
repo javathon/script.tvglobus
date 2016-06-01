@@ -152,6 +152,7 @@ class TVGuide(xbmcgui.WindowXML):
         self.database = None
         self.isPlaybackStopped=False
         self.testcounter=0
+        self.lastTVFocusPoint=Point()
 
         self.mode = MODE_EPG
         self.currentChannel = None
@@ -237,6 +238,8 @@ class TVGuide(xbmcgui.WindowXML):
     @buggalo.buggalo_try_except({'method': 'TVGuide.onAction'})
     def onAction(self, action):
         debug('Mode is: %s' % self.mode)
+        xbmc.log(msg='METH: onAction -> [mode]:'+str(self.mode), level=xbmc.LOGDEBUG)
+        xbmc.log(msg='METH: onAction -> [actionID]:'+str(action.getId()), level=xbmc.LOGDEBUG)
 
         if self.mode == MODE_TV:
             self.onActionTVMode(action)
@@ -304,6 +307,8 @@ class TVGuide(xbmcgui.WindowXML):
                 self._showOsd()
 
     def onActionEPGMode(self, action):
+        
+        
         if action.getId() in [ACTION_PARENT_DIR, KEY_NAV_BACK, ACTION_PREVIOUS_MENU]:
             self.close()
             return
@@ -580,9 +585,16 @@ class TVGuide(xbmcgui.WindowXML):
             return False  
 
     def playChannel(self, channel):
+        ### update 1.06.2016
+        self.lastTVFocusPoint.y=self.focusPoint.y;
+        self.lastTVFocusPoint.x=self.focusPoint.x;
+        self.mode = MODE_TV
+        #######
+        
         self.currentChannel = channel
         wasPlaying = self.player.isPlaying()
         url = self.database.getStreamUrl(channel)
+
         #xbmc.log(msg='Raven startlog.', level=xbmc.LOGNOTICE)
         #xbmc.log(msg='Raven startlog 1:'+str(self.focusPoint), level=xbmc.LOGNOTICE)
         control = self._findControlAt(self.focusPoint)
@@ -590,6 +602,8 @@ class TVGuide(xbmcgui.WindowXML):
         #xbmc.log(msg='Raven startlog 2:'+str(self.viewStartDate), level=xbmc.LOGNOTICE)
         #xbmc.log(msg='Raven startlog 3:'+str(self.epgView), level=xbmc.LOGNOTICE)
         program = self._getProgramFromControl(control)
+        xbmc.log(msg='METH: playChannel ------>>>>>>', level=xbmc.LOGDEBUG)
+        xbmc.log(msg='METH: playChannel  -> [chanelidx]:'+str(self.channelIdx), level=xbmc.LOGDEBUG)
         #xbmc.log(msg='Raven startlog 4:'+str(program.startDate), level=xbmc.LOGNOTICE)
         #xbmc.log(msg='Raven startlog 5:'+str(program.description), level=xbmc.LOGNOTICE)
         #xbmc.log(msg='Raven startlog 6:'+str(self.formatTime(program.startDate)), level=xbmc.LOGNOTICE)
@@ -698,10 +712,22 @@ class TVGuide(xbmcgui.WindowXML):
             return  # ignore redraw request while redrawing
         debug('onRedrawEPG')
 
-        #bug korrektur
-        if self.mode==MODE_TV and channelStart==0:
+        #bug korrektur, update 1.06.2016
+#        if (self.mode==MODE_TV  or self.mode==MODE_EPG) and channelStart==0 and self.channelIdx!=0:
+        if self.mode==MODE_TV  and channelStart==0:
             channelStart=self.channelIdx
-            
+            self.focusPoint.x=self.lastTVFocusPoint.x
+            self.focusPoint.y=self.lastTVFocusPoint.y
+        
+        #json_query = xbmc.executeJSONRPC('{"jsonrpc":"2.0", "id":1, "method":"GUI.GetProperties","params":{"properties":["fullscreen"]}, "id":1}')
+        #jsonobject = json.loads(json_response.decode('utf-8','replace'))
+        #fullscr=False
+        #if(jsonobject.has_key('result')): 
+        #    fullscr = jsonobject["result"]["fullscreen"]
+        #if fullscr==False  and channelStart==0 and self.player.isPlaying()!=0:
+
+       
+        
         # nach Videoende muss epg modus nicht noch mal laufen      
         #if self.isPlaybackStopped and self.mode==MODE_EPG:
         #    self.isPlaybackStopped=False
