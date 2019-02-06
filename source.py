@@ -971,6 +971,7 @@ class XMLTVSource(Source):
         #todo loop und array erstellen
         #serverurl='http://tv3.noip.me'
         #serverurl='http://tv2.no-ip.org'
+        xbmc.log(msg='Begining M3U loading.....', level=xbmc.LOGDEBUG)
         content_loaded=False
         streamplaylist=None
         i=0; 
@@ -992,12 +993,14 @@ class XMLTVSource(Source):
                 
         i=0; 
         while content_loaded==False and i<3: 
+            xbmc.log(msg='Parse M3U.....', level=xbmc.LOGDEBUG)
             currentserverurl=self.ottserverurl[i]
             try:      
                 m3upar=m3uparserutil.M3UParser()
-                self.externalPlaylist=m3upar.parseM3U(streamplaylist,currentserverurl)
+                self.externalPlaylist=m3upar.parseM3U(streamplaylist,currentserverurl,self.ottKey)
                 break
             except:
+                xbmc.log(msg='M3U parsing exception null pointer retry -> '+str(i), level=xbmc.LOGDEBUG)
                 i=i+1
         #else:
         #    self.externalPlaylist=None
