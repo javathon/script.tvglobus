@@ -1,2 +1,5 @@
+[B]Version 1.2.4 - 2016-03-30[/B]
+- Bugfix. Missing logo will now be replaced by fallback-logo
+- Bugfix. ottkey or placeholder within M3U list will now be replaced by customer key. Before-> "http://ott.watch/XXXXXXXX/1.m3u", after-> "http://ott.watch/CUSTOMERKEY/1.m3u"
 [B]Version 1.2.2 - 2016-03-30[/B]
 - EPG und Archivzeiten wurden auf UTC umgestellt
